@@ -1,8 +1,9 @@
 // CONTROLLER = BIG BOSS (receive requests and decide what to do next)
 
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Query, Put, NotFoundException, ParseIntPipe, UseGuards } from '@nestjs/common';
 import { NinjasService } from './ninjas.service';
 import { CreateNinjaDto } from './dto/create-ninja.dto'; 
+import { BeltGuard } from '../belt/belt.guard';
 
 @Controller('ninjas')
 export class NinjasController {
@@ -15,12 +16,17 @@ export class NinjasController {
   }
 
   @Get(':id')
-  getNinjaById(@Param("id") id: number): CreateNinjaDto {
+  getNinjaById(@Param("id", ParseIntPipe) id: number): CreateNinjaDto {
+    if (!this.ninjasService.getNinjaById(id)) {
+      console.log("ID is not valid!")
+    }
+
     console.log(this.ninjasService.getNinjaById(id))
     return this.ninjasService.getNinjaById(id);
   }
 
   @Post()
+  @UseGuards(BeltGuard)
   createNinja(@Body() createNinjaDto: CreateNinjaDto): CreateNinjaDto {
     console.log(this.ninjasService.createNinja(createNinjaDto))
     return this.ninjasService.createNinja(createNinjaDto);
@@ -28,7 +34,7 @@ export class NinjasController {
 
   @Put(':id')
   updateNinja(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() createNinjaDto: CreateNinjaDto,
   ): CreateNinjaDto {
     console.log(this.ninjasService.updateNinja(id, createNinjaDto))
@@ -36,7 +42,7 @@ export class NinjasController {
   }
 
   @Delete(':id')
-  deleteNinja(@Param('id') id: number): CreateNinjaDto {
+  deleteNinja(@Param('id', ParseIntPipe) id: number): CreateNinjaDto {
     console.log(this.ninjasService.deleteNinja(id))
     return this.ninjasService.deleteNinja(id);
   }

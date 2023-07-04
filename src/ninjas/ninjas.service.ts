@@ -31,7 +31,7 @@ export class NinjasService {
 
   getNinjaById(id: number): CreateNinjaDto {
     console.log(`Get ninja ${id}`);
-    return this.ninjas.find(ninja => ninja.id == id);
+    return this.ninjas.find(ninja => ninja.id === id);
   }
 
   createNinja(createNinjaDto: CreateNinjaDto): CreateNinjaDto {
@@ -46,7 +46,7 @@ export class NinjasService {
 
   updateNinja(id: number, createNinjaDto: CreateNinjaDto): CreateNinjaDto {
     console.log("Updated a ninja")
-    const ninjaToUpdate = this.ninjas.find(ninja => ninja.id == id);
+    const ninjaToUpdate = this.ninjas.find(ninja => ninja.id === id);
     if (ninjaToUpdate) {
       ninjaToUpdate.name = createNinjaDto.name;
       ninjaToUpdate.weapon = createNinjaDto.weapon;
@@ -56,7 +56,7 @@ export class NinjasService {
 
   deleteNinja(id: number): CreateNinjaDto {
     console.log("Delete a ninja")
-    const index = this.ninjas.findIndex(ninja => ninja.id == id);
+    const index = this.ninjas.findIndex(ninja => ninja.id === id);
     if (index >= 0) {
       const deletedNinja = this.ninjas.splice(index, 1);
       return deletedNinja[0];
